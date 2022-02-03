@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-import os
 
+import subprocess
+import sys
+import csv
 
 SIM_IDENTIFIERS = [
     'Alpha',
@@ -31,8 +33,35 @@ SIM_IDENTIFIERS = [
     'Zulu',
 ]
 
-if __name__ == '__main__':
-    print("Hello World!")
 
-    for FONETIC in SIM_IDENTIFIERS:
-        os.system('xcrun simctl delete \'' + FONETIC + ' iPhone 13 (15.2)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-2')
+def shell(cmd_str):
+    proc = subprocess.Popen([cmd_str], shell=True, stdout=subprocess.PIPE)
+
+    return proc.stdout.read().split('\n')[0]
+
+
+if __name__ == '__main__':
+    args = sys.argv
+
+    if args[1] == 'make':
+        sims = []
+        for FONETIC in SIM_IDENTIFIERS:
+            id = shell('xcrun simctl create \'' + FONETIC + ' iPhone 13 (15.2)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-2')
+            sims.append(id)
+            print(id + ' is successfully created.')
+
+
+        with open('created_sims.csv', 'w') as sims_file:
+            writer = csv.writer(sims_file)
+            writer.writerow(["ID", "Device", "OS Version"])
+            for sim in sims:
+                writer.writerow([sim, "iPhone 13", "iOS 15.2"])
+
+
+    if args[1] == 'clean':
+        for FONETIC in SIM_IDENTIFIERS:
+            shell('xcrun simctl delete \'' + FONETIC + ' iPhone 13 (15.2)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-2')
+
+    if args[1] == 'launch':
+        for FONETIC in SIM_IDENTIFIERS:
+            shell('xcrun simctl delete \'' + FONETIC + ' iPhone 13 (15.2)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-2')
