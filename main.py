@@ -34,10 +34,10 @@ SIM_IDENTIFIERS = [
 ]
 
 
-def shell(cmd_str):
+def shell(cmd_str) -> str:
     proc = subprocess.Popen([cmd_str], shell=True, stdout=subprocess.PIPE)
 
-    return proc.stdout.read().split('\n')[0]
+    return (proc.stdout.read()).decode().split('\n')[0]
 
 
 if __name__ == '__main__':
@@ -57,11 +57,17 @@ if __name__ == '__main__':
             for sim in sims:
                 writer.writerow([sim, "iPhone 13", "iOS 15.2"])
 
-
     if args[1] == 'clean':
-        for FONETIC in SIM_IDENTIFIERS:
-            shell('xcrun simctl delete \'' + FONETIC + ' iPhone 13 (15.2)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-2')
+        with open('created_sims.csv') as f:
+            csvreader = csv.reader(f)
+            for row in csvreader:
+                shell('xcrun simctl erase ' + row[0])
+                shell('xcrun simctl delete ' + row[0])
+                print('Erased ' + row[0] + ' and deleted.')
 
     if args[1] == 'launch':
-        for FONETIC in SIM_IDENTIFIERS:
-            shell('xcrun simctl delete \'' + FONETIC + ' iPhone 13 (15.2)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-2')
+        with open('created_sims.csv') as f:
+            csvreader = csv.reader(f)
+            for row in csvreader:
+                shell('xcrun simctl boot ' + row[0])
+                print('Booted ' + row[0] + ' .')
