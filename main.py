@@ -4,7 +4,19 @@ import subprocess
 import sys
 import csv
 
+
 SIM_IDENTIFIERS = [
+    'Alpha',
+    'Bravo',
+    'Charlie',
+    'Delta',
+    'Echo',
+    'Foxtrot',
+    'Golf',
+    'Hotel',
+]
+
+SIM_IDENTIFIERS_FULL = [
     'Alpha',
     'Bravo',
     'Charlie',
