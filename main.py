@@ -3,7 +3,7 @@
 import subprocess
 import sys
 import csv
-
+import os
 
 SIM_IDENTIFIERS = [
     'Alpha',
@@ -14,6 +14,18 @@ SIM_IDENTIFIERS = [
     'Foxtrot',
     'Golf',
     'Hotel',
+    'India',
+    'Juliet',
+    'Kilo',
+    'Lima',
+    'Mike',
+    'November',
+    'Oscar',
+    'Papa',
+    'Quebec',
+    'Romeo',
+    'Sierra',
+    'Tango',
 ]
 
 SIM_IDENTIFIERS_FULL = [
@@ -78,6 +90,7 @@ if __name__ == '__main__':
                 shell('xcrun simctl erase ' + row[0])
                 shell('xcrun simctl delete ' + row[0])
                 print('Erased ' + row[0] + ' and deleted.')
+        os.remove('created_sims.csv')
 
     if args[1] == 'boot':
         shell('open -a "Simulator"')
@@ -89,7 +102,7 @@ if __name__ == '__main__':
 
                 res = shell('xcrun simctl boot ' + row[0])
 
-                print('Booted ' + row[0] + ' .')
+                print('Booted ' + row[0] + '.')
 
 
     if args[1] == 'shutdown':
@@ -99,7 +112,7 @@ if __name__ == '__main__':
                 if index == 0: continue
 
                 shell('xcrun simctl shutdown ' + row[0])
-                print('Booted ' + row[0] + ' .')
+                print('Halted ' + row[0] + '.')
 
 
 
