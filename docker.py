@@ -3,26 +3,8 @@
 import subprocess
 import sys
 import csv
-import os
 
 SIM_IDENTIFIERS = [
-    'Alpha',
-    'Bravo',
-    'Charlie',
-    'Delta',
-    'Echo',
-    'Foxtrot',
-    'Golf',
-    'Hotel',
-    'India',
-    'Juliet',
-    'Kilo',
-    'Lima',
-    'Mike',
-
-]
-
-SIM_IDENTIFIERS_FULL = [
     'Alpha',
     'Bravo',
     'Charlie',
@@ -64,7 +46,7 @@ if __name__ == '__main__':
     if args[1] == 'make':
         sims = []
         for FONETIC in SIM_IDENTIFIERS:
-            id = shell('xcrun simctl create \'' + FONETIC + ' iPhone 13 (15.4)\' com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-4')
+            id = shell('docker run -it -d --name ' + FONETIC + '-Ubuntu ubuntu')
             sims.append(id)
             print(id + ' is successfully created.')
 
@@ -73,7 +55,7 @@ if __name__ == '__main__':
             writer = csv.writer(sims_file)
             writer.writerow(["ID", "Device", "OS Version"])
             for sim in sims:
-                writer.writerow([sim, "iPhone 13", "iOS 15.4"])
+                writer.writerow([sim, "iPhone 13", "iOS 15.2"])
 
     if args[1] == 'clean':
         with open('created_sims.csv') as f:
@@ -84,7 +66,6 @@ if __name__ == '__main__':
                 shell('xcrun simctl erase ' + row[0])
                 shell('xcrun simctl delete ' + row[0])
                 print('Erased ' + row[0] + ' and deleted.')
-        os.remove('created_sims.csv')
 
     if args[1] == 'boot':
         shell('open -a "Simulator"')
@@ -96,7 +77,7 @@ if __name__ == '__main__':
 
                 res = shell('xcrun simctl boot ' + row[0])
 
-                print('Booted ' + row[0] + '.')
+                print('Booted ' + row[0] + ' .')
 
 
     if args[1] == 'shutdown':
@@ -106,7 +87,7 @@ if __name__ == '__main__':
                 if index == 0: continue
 
                 shell('xcrun simctl shutdown ' + row[0])
-                print('Halted ' + row[0] + '.')
+                print('Booted ' + row[0] + ' .')
 
 
 
