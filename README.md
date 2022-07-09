@@ -1,3 +1,3 @@
 # clustersimu
 
->> Now under construction...
+Test experiment program for multiple iOS simulator maker.
